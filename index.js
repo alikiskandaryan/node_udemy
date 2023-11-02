@@ -2,7 +2,8 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 const slugify = require('slugify');
-const replaceTemplate = require('./modules.js/replaceTemplate')
+const replaceTemplate = require('./modules.js/replaceTemplate');
+const { todo } = require('node:test');
 
 // /////////////////////////////////////////////
 // FILES
@@ -36,7 +37,6 @@ const replaceTemplate = require('./modules.js/replaceTemplate')
 
 // console.log('will read file');
 
-
 // /////////////////////////////////////////////
 // SERVER & ROUTING & API
 
@@ -48,7 +48,6 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8', );
 const dataObject = JSON.parse(data);
 const slugs = dataObject.map(el => slugify(el.productName,{lower: true,}))
 
-console.log(slugs)
 const server = http.createServer((req,res) => {
     const {query,pathname } = (url.parse(req.url,true))
 
@@ -56,6 +55,7 @@ const server = http.createServer((req,res) => {
     // Overview page
     if(pathname === '/' || pathname === '/overview'){
         res.writeHead(200, {"Content-type" : "text/html"});
+
 
        const cardsHtml =  dataObject.map(el => replaceTemplate(tempCard,el)).join('');
        const output = tempOverview.replace('{%PRODUCT_CARDS%}' ,cardsHtml)
@@ -85,7 +85,6 @@ const server = http.createServer((req,res) => {
     }
 
 });
-
 server.listen(8000,'127.0.0.1' , () =>{
     console.log('Listening to request on port 8000');
 });
